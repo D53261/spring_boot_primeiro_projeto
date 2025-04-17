@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.userdept.demo.entities.Department;
+import com.userdept.demo.exceptions.ResourceNotFoundException;
 import com.userdept.demo.repositories.DepartmentRepository;
 
 @RestController
@@ -28,7 +29,7 @@ public class DepartmentController {
 
     @GetMapping(value = "/{id}")
     public Department findById(@PathVariable Long id) {
-        Department result = repository.findById(id).orElseThrow(() -> new RuntimeException("Department not found"));
+        Department result = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Department not found with ID: " + id));
         return result;
     }
 

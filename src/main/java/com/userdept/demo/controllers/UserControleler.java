@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.userdept.demo.entities.User;
+import com.userdept.demo.exceptions.ResourceNotFoundException;
 import com.userdept.demo.repositories.UserRepository;
 
 @RestController
@@ -30,7 +31,7 @@ public class UserControleler {
 
     @GetMapping(value = "/{id}")
     public User findById(@PathVariable Long id) {
-        User result = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        User result = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
         return result;
     }
 
@@ -42,7 +43,7 @@ public class UserControleler {
 
     @PutMapping(value = "/{id}")
     public User change(@PathVariable Long id, @RequestBody User user) {
-        User entity = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        User entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
         entity.setName(user.getName());
         entity.setEmail(user.getEmail());
         entity.setDepartment(user.getDepartment());
@@ -51,8 +52,8 @@ public class UserControleler {
     }
 
     @DeleteMapping(value = "/{id}")
-    public User insert(@PathVariable Long id) {
-        User user = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    public User delete(@PathVariable Long id) {
+        User user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
         repository.delete(user);
         return user;
     }
